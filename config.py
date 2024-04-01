@@ -31,12 +31,6 @@ from libqtile.utils import guess_terminal
 from libqtile.widget import Bluetooth
 
 
-volume = widget.Volume(
-    emoji=False,
-    fmt='Volume: {}',
-    step=5,
-    update_interval=0.2
-)
 
 mod = "mod4"
 terminal = guess_terminal()
@@ -64,7 +58,7 @@ keys = [
     Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
     Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
     Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
-    
+    Key([mod], "e", lazy.spawn("nemo")),   
     Key([mod], "r", lazy.spawn("rofi -show drun")),
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
@@ -134,8 +128,8 @@ for i in groups:
 
 layout_theme = {
     "border_width": 3,
-    "margin": 12,
-    "border_focus": "0000FF",
+    "margin": 15,
+    "border_focus": "FFFFFF",
     "border_normal": "CCCCCC"
 }
 
@@ -169,34 +163,21 @@ screens = [
                 # widget.CurrentLayout(),
                 widget.GroupBox(),
                 widget.Prompt(),
-                Bluetooth(
-                    adapter_paths=['/org/bluez/hci0'],
-                    default_text='BT {connected_devices}',
-                    adapter_format='Adapter: {name} [{powered}{discovery}]',
-                    device_format='Device: {name}{battery_level} [{symbol}]',
-                    device_battery_format=' ({battery}%)',
-                    symbol_connected='*',
-                    symbol_discovery=('D', ''),
-                    symbol_paired='-',
-                    symbol_powered=('*', '-'),
-                    symbol_unknown='?',
-                    foreground='ffffff',
-                ),
                 # TextBox(text=" | "),
                 widget.WindowName(),
                 widget.PulseVolume(
                     mute_command="pactl set-sink-mute @DEFAULT_SINK@ toggle",
                     increase_command="pactl set-sink-volume @DEFAULT_SINK@ +5%",
                     decrease_command="pactl set-sink-volume @DEFAULT_SINK@ -5%",
-                    fmt="Volume: {}"
+                    fmt="Volume: {} |"
                 ),
 
                 widget.Battery(
-                    format="{char} {percent:2.0%}",
+                    format="{char} {percent:2.0%} |",
                     charge_char="⚡",
                     discharge_char="",
                     notify_below=15,
-                    update_interval=60,
+                    update_interval=15,
                 ),
 
                 widget.Chord(
@@ -210,7 +191,7 @@ screens = [
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # widget.StatusNotifier(),
                 widget.Systray(),
-                widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
+                widget.Clock(format="%Y-%m-%d %a %I:%M %p | "),
                 widget.QuickExit(),
             ],
             24,
